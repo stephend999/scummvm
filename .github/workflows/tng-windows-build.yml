@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   windows-x64:
-    runs-on: windows-2025
+    runs-on: windows-latest
     env:
       CONFIGURATION: Release
       PLATFORM: x64
