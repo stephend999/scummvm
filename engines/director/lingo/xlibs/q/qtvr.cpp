@@ -249,20 +249,20 @@ void QTVR::m_mouseOver(int nargs) {
 				hotspot = me->_video->getClickedHotspotID();
 
 				if (!hotspot) {
-					if (nodeChanged)
-						g_lingo->push(Common::String::format("jump,%d", node));
-					else
-						g_lingo->push(Common::String("pan ,0"));
+					Datum result = nodeChanged ? Datum(Common::String::format("jump,%d", node)) : Datum(Common::String("pan ,0"));
+					g_lingo->_theResult = result;
+					g_lingo->push(result);
 
 					return;
 				}
 
 				const Common::QuickTimeParser::PanoHotSpot *hotspotData = me->_video->getHotSpotByID(hotspot);
 
-				if (nodeChanged || (hotspotData && hotspotData->type == MKTAG('l','i','n','k')))
-					g_lingo->push(Common::String::format("jump,%d", node));
-				else
-					g_lingo->push(Common::String::format("%s,%d", hotspotData ? tag2str((uint32)hotspotData->type) : "undf", hotspot));
+				Datum result = (nodeChanged || (hotspotData && hotspotData->type == MKTAG('l','i','n','k')))
+					? Datum(Common::String::format("jump,%d", node))
+					: Datum(Common::String::format("%s,%d", hotspotData ? tag2str((uint32)hotspotData->type) : "undf", hotspot));
+				g_lingo->_theResult = result;
+				g_lingo->push(result);
 
 				return;
 			}
