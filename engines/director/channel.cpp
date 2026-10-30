@@ -489,6 +489,11 @@ void Channel::setCast(CastMemberID memberID) {
 			DigitalVideoCastMember *dv = (DigitalVideoCastMember *)_sprite->_cast;
 			if (dv->loadVideoFromCast()) {
 				_movieTime = 0;
+				// A cast member assigned to a sprite from Lingo is expected to
+				// begin playing.  In particular, paused-at-start QuickTime members
+				// otherwise leave the channel rate at zero, causing "wait for video"
+				// logic to consider the movie inactive and advance immediately.
+				_movieRate = 1.0;
 				dv->setChannel(this);
 				dv->startVideo();
 			}
